@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ExerciseConfigurations\**" />
+    <Compile Remove="ExerciseDetails\**" />
+    <Compile Remove="Mobile\**" />
+    <Content Remove="ExerciseConfigurations\**" />
+    <Content Remove="ExerciseDetails\**" />
+    <Content Remove="Mobile\**" />
+    <EmbeddedResource Remove="ExerciseConfigurations\**" />
+    <EmbeddedResource Remove="ExerciseDetails\**" />
+    <EmbeddedResource Remove="Mobile\**" />
+    <None Remove="ExerciseConfigurations\**" />
+    <None Remove="ExerciseDetails\**" />
+    <None Remove="Mobile\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="Bogus" Version="35.6.3" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
+	<PackageReference Include="CassandraCSharpDriver" Version="3.22.0" />
+	<PackageReference Include="WolverineFx.EntityFrameworkCore" Version="4.12.2" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.9">
+		<PrivateAssets>all</PrivateAssets>
+		<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+	</PackageReference>
+	<PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.9" />
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+	<PackageReference Include="Azure.Storage.Blobs" Version="12.26.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\iowa\provider\Provider.csproj" />
+    <ProjectReference Include="..\..\packages\Clients\dotNET\REST\Version1\Library\Library.csproj" />
+  </ItemGroup>
+
+</Project>

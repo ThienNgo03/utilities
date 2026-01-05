@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Home.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:contentviews="clr-namespace:Version1.Features.Home.ContentViews.CarouselItem"
+    xmlns:local="clr-namespace:Version1.Features.Home"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    Padding="16"
+    x:DataType="local:ViewModel"
+    Background="{x:StaticResource GradientBackground}"
+    Loaded="ContentPage_Loaded">
+
+    <ContentPage.Resources>
+
+        <FontImageSource
+            x:Key="AddIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_add_circle_32_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="SubtractIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_subtract_circle_32_regular}"
+            Color="White" />
+
+        <FontImageSource
+            x:Key="NextIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_next_32_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="PreviousIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_previous_32_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="ConfigIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_data_usage_settings_20_regular}"
+            Color="White" />
+
+        <LinearItemsLayout
+            x:Key="CarouselItemsLayout"
+            ItemSpacing="10"
+            Orientation="Horizontal"
+            SnapPointsAlignment="Center"
+            SnapPointsType="Mandatory" />
+        <DataTemplate x:Key="CarouselItemTemplate" x:DataType="contentviews:Model">
+            <contentviews:Component Context="{x:Binding Mode=TwoWay}" />
+        </DataTemplate>
+    </ContentPage.Resources>
+
+    <RefreshView
+        Command="{x:Binding RefreshCommand}"
+        IsRefreshing="{x:Binding IsFuckingBusy,
+                                 Mode=OneWay}"
+        RefreshColor="Black">
+        <ScrollView>
+            <Grid RowDefinitions="300, 200, 200">
+                <VerticalStackLayout Spacing="8">
+                    <CarouselView
+                        HorizontalScrollBarVisibility="Never"
+                        IndicatorView="CarouselIndicator"
+                        IsBounceEnabled="True"
+                        ItemTemplate="{x:StaticResource CarouselItemTemplate}"
+                        ItemsLayout="{x:StaticResource CarouselItemsLayout}"
+                        ItemsSource="{x:Binding Items,
+                                                Mode=OneWay}"
+                        Loop="False"
+                        PeekAreaInsets="10"
+                        VerticalOptions="Start" />
+                    <IndicatorView
+                        x:Name="CarouselIndicator"
+                        HorizontalOptions="Center"
+                        IndicatorColor="LightGray"
+                        SelectedIndicatorColor="Cyan" />
+                </VerticalStackLayout>
+            </Grid>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Profile.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Version1.Features.Profile"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    Title="Page"
+    x:DataType="local:ViewModel">
+    <Grid>
+
+        <Border
+            Padding="16"
+            BackgroundColor="White"
+            StrokeShape="RoundRectangle 8">
+            <VerticalStackLayout Spacing="8">
+                <Button
+                    BackgroundColor="Red"
+                    Command="{x:Binding LogoutCommand}"
+                    Text="Log out"
+                    TextColor="White" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

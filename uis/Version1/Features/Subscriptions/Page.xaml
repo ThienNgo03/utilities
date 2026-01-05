@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Subscriptions.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Version1.Features.Subscriptions"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Appearing="ContentPage_Appearing"
+    BackgroundColor="#000000">
+    <ContentPage.Resources>
+        <local:SumPriceConverter x:Key="SumPriceConverter" />
+        <local:USDToVNDConverter x:Key="USDToVNDConverter" />
+        <local:TextDecorationsConverter x:Key="TextDecorationsConverter" />
+        <toolkit:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        <toolkit:IsNullConverter x:Key="IsNullConverter" />
+        <toolkit:IsNotNullConverter x:Key="IsNotNullConverter" />
+    </ContentPage.Resources>
+
+    <Grid>
+        <!--  Content chính - Hiện khi KHÔNG loading  -->
+        <Grid
+            Padding="16"
+            IsVisible="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+            RowSpacing="16">
+            <CollectionView
+                x:Name="MainList"
+                ItemsSource="{Binding AppUsages}"
+                SelectionChanged="CollectionView_SelectionChanged"
+                SelectionMode="Single">
+                <CollectionView.Header>
+                    <Border
+                        Grid.Row="1"
+                        Padding="16"
+                        BackgroundColor="#171717"
+                        MaximumHeightRequest="800"
+                        Stroke="#fafafa"
+                        StrokeShape="RoundRectangle 8"
+                        StrokeThickness="0.5">
+                        <VerticalStackLayout Spacing="8">
+
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Subtitle"
+                                HorizontalOptions="Center"
+                                Text="{Binding Month}"
+                                TextColor="White"
+                                TextDecorations="Underline" />
+                            <syncfusionToolkit:SfCircularChart>
+                                <syncfusionToolkit:PieSeries
+                                    EnableAnimation="True"
+                                    EnableTooltip="True"
+                                    IsVisibleOnLegend="True"
+                                    ItemsSource="{Binding ChartSlices}"
+                                    PaletteBrushes="{Binding CustomBrushes}"
+                                    Radius="1"
+                                    ShowDataLabels="True"
+                                    XBindingPath="Subscription"
+                                    YBindingPath="Price">
+
+                                    <syncfusionToolkit:PieSeries.LabelTemplate>
+                                        <DataTemplate>
+                                            <HorizontalStackLayout>
+                                                <Label
+                                                    FontSize="10"
+                                                    Text="{Binding Item.Subscription}"
+                                                    TextColor="#fafafa" />
+                                                <Label
+                                                    FontSize="10"
+                                                    Text=" : "
+                                                    TextColor="#fafafa" />
+                                                <Label
+                                                    FontSize="10"
+                                                    Text="{Binding Item.Price, StringFormat='{0:N0}₫'}"
+                                                    TextColor="#fafafa" />
+                                            </HorizontalStackLayout>
+                                        </DataTemplate>
+                                    </syncfusionToolkit:PieSeries.LabelTemplate>
+
+                                    <syncfusionToolkit:PieSeries.DataLabelSettings>
+                                        <syncfusionToolkit:CircularDataLabelSettings LabelPosition="Inside" SmartLabelAlignment="Shift" />
+                                    </syncfusionToolkit:PieSeries.DataLabelSettings>
+                                </syncfusionToolkit:PieSeries>
+                                <syncfusionToolkit:SfCircularChart.Legend>
+                                    <syncfusionToolkit:ChartLegend>
+                                        <syncfusionToolkit:ChartLegend.LabelStyle>
+                                            <syncfusionToolkit:ChartLegendLabelStyle TextColor="White" />
+                                        </syncfusionToolkit:ChartLegend.LabelStyle>
+                                    </syncfusionToolkit:ChartLegend>
+                                </syncfusionToolkit:SfCircularChart.Legend>
+                            </syncfusionToolkit:SfCircularChart>
+                            <Label
+                                FontAttributes="Bold"
+                                HorizontalOptions="Center"
+                                Text="{Binding TotalPrice, StringFormat='Total: {0:N0}₫'}"
+                                TextColor="#fafafa" />
+                            <syncfusionToolkit:SfButton
+                                x:Name="AddButton"
+                                Background="#2b2b2b"
+                                Clicked="AddButton_Clicked"
+                                CornerRadius="4"
+                                Text="Add"
+                                TextColor="White" />
+                        </VerticalStackLayout>
+                    </Border>
+                </CollectionView.Header>
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout
+                        HorizontalItemSpacing="10"
+                        Orientation="Vertical"
+                        VerticalItemSpacing="16" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="local:AppUsage">
+                        <Border
+                            Padding="16"
+                            BackgroundColor="#171717"
+                            Stroke="#fafafa"
+                            StrokeShape="RoundRectangle 8"
+                            StrokeThickness="0.5">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <VerticalStackLayout Spacing="4">
+
+                                    <Image
+                                        HeightRequest="86"
+                                        Source="{Binding Icon, Mode=OneWay}"
+                                        WidthRequest="86" />
+
+                                    <BoxView
+                                        BackgroundColor="{Binding Hex}"
+                                        CornerRadius="2"
+                                        HeightRequest="6"
+                                        WidthRequest="86" />
+                                </VerticalStackLayout>
+                                <VerticalStackLayout
+                                    Grid.Column="1"
+                                    Grid.ColumnSpan="2"
+                                    Padding="8"
+                                    Spacing="8">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        Text="{Binding Company}"
+                                        TextColor="#fafafa"
+                                        VerticalOptions="Center" />
+                                    <Label
+                                        FontSize="12"
+                                        Text="{Binding Subscription}"
+                                        TextColor="#fafafa"
+                                        VerticalOptions="Center" />
+                                </VerticalStackLayout>
+                                <Grid Grid.Column="2">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="14"
+                                        HorizontalOptions="End"
+                                        Text="{Binding Price, StringFormat='{0:N0}₫'}"
+                                        TextColor="#fafafa"
+                                        TextDecorations="{Binding IsDiscountApplied, Converter={StaticResource TextDecorationsConverter}}" />
+                                    <Label
+                                        HorizontalOptions="End"
+                                        Text="{Binding Discount}"
+                                        TextColor="#fafafa"
+                                        VerticalOptions="Center" />
+
+                                    <HorizontalStackLayout Spacing="8" VerticalOptions="End">
+
+                                        <Border
+                                            Padding="4,2,4,2"
+                                            BackgroundColor="#292929"
+                                            IsVisible="{Binding IsDiscountApplied}"
+                                            Stroke="#292929"
+                                            StrokeShape="RoundRectangle 4">
+                                            <Label
+                                                FontSize="11"
+                                                Text="Discount applied"
+                                                TextColor="#fafafa"
+                                                VerticalOptions="Center" />
+                                        </Border>
+
+                                        <Border
+                                            Padding="4,2,4,2"
+                                            BackgroundColor="#292929"
+                                            IsVisible="{Binding IsDiscountAvailable}"
+                                            Stroke="#292929"
+                                            StrokeShape="RoundRectangle 4">
+                                            <Label
+                                                FontSize="11"
+                                                Text="Discount available"
+                                                TextColor="#fafafa"
+                                                VerticalOptions="Center" />
+                                        </Border>
+
+                                        <Border
+                                            Padding="4,2,4,2"
+                                            BackgroundColor="#292929"
+                                            IsVisible="{Binding IsPaid}"
+                                            Stroke="#292929"
+                                            StrokeShape="RoundRectangle 4">
+                                            <Label
+                                                FontSize="11"
+                                                Text="Paid"
+                                                TextColor="#fafafa"
+                                                VerticalOptions="Center" />
+                                        </Border>
+
+                                        <Border
+                                            Padding="4,2,4,2"
+                                            BackgroundColor="#292929"
+                                            Stroke="#292929"
+                                            StrokeShape="RoundRectangle 4">
+
+                                            <Label FontSize="11">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="{Binding DayLeft}" TextColor="#fafafa" />
+                                                        <Span Text=" " />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup Name="CommonStates">
+                                    <VisualState Name="Normal" />
+                                    <VisualState Name="Selected">
+                                        <VisualState.Setters>
+                                            <!--  Transparent background removes highlight  -->
+                                            <Setter Property="BackgroundColor" Value="Transparent" />
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!--  Loading Overlay - Hiện khi đang loading  -->
+        <Grid BackgroundColor="#CC000000" IsVisible="{Binding IsLoading}">
+            <VerticalStackLayout
+                HorizontalOptions="Center"
+                Spacing="16"
+                VerticalOptions="Center">
+                <ActivityIndicator
+                    HeightRequest="50"
+                    IsRunning="{Binding IsLoading}"
+                    WidthRequest="50"
+                    Color="White" />
+                <Label
+                    FontSize="16"
+                    Text="Loading subscriptions..."
+                    TextColor="White" />
+            </VerticalStackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

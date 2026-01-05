@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Authentication.SignIn.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:Version1.Features.Authentication.SignIn"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    x:DataType="app:ViewModel"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <FontImageSource
+            x:Key="DumbbellIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_dumbbell_28_regular}"
+            Color="#ff6c37" />
+        <FontImageSource
+            x:Key="HeartPulseIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_heart_pulse_32_regular}"
+            Color="#f25767" />
+        <FontImageSource
+            x:Key="SoccerIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_sport_soccer_24_regular}"
+            Color="#91cb89" />
+    </ContentPage.Resources>
+
+    <Grid Background="{x:StaticResource GradientBackground}" RowDefinitions="0, *, 30">
+        <Border
+            Grid.Row="1"
+            Margin="16"
+            BackgroundColor="#ededed"
+            StrokeShape="RoundRectangle 8"
+            VerticalOptions="Center">
+            <VerticalStackLayout Padding="24" Spacing="16">
+                <Label
+                    FontAttributes="Bold"
+                    FontSize="Title"
+                    HorizontalOptions="Center"
+                    Text="Welcome"
+                    TextColor="Black" />
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="16">
+                    <ImageButton
+                        HeightRequest="40"
+                        Source="{x:StaticResource DumbbellIcon}"
+                        WidthRequest="40" />
+                    <ImageButton
+                        HeightRequest="40"
+                        Source="{x:StaticResource HeartPulseIcon}"
+                        WidthRequest="40" />
+                    <ImageButton
+                        HeightRequest="40"
+                        Source="{x:StaticResource SoccerIcon}"
+                        WidthRequest="40" />
+                </HorizontalStackLayout>
+                <VerticalStackLayout>
+                    <syncfusionToolkit:SfTextInputLayout
+                        ContainerType="Outlined"
+                        EnableHintAnimation="True"
+                        Hint="Email Or Phone Number"
+                        IsEnabled="{x:Binding IsAccountEntryEnable,
+                                              Mode=OneWay}">
+                        <Entry
+                            x:Name="AccountEntry"
+                            Text="{x:Binding Form.Account,
+                                             Mode=TwoWay}"
+                            TextColor="Black" />
+                    </syncfusionToolkit:SfTextInputLayout>
+                    <syncfusionToolkit:SfTextInputLayout
+                        ContainerType="Outlined"
+                        EnableHintAnimation="True"
+                        Hint="Password"
+                        IsEnabled="{x:Binding IsPasswordEntryEnable,
+                                              Mode=OneWay}">
+                        <Entry
+                            x:Name="PasswordEntry"
+                            IsPassword="True"
+                            Placeholder="Password"
+                            Text="{x:Binding Form.Password,
+                                             Mode=TwoWay}"
+                            TextColor="Black" />
+                    </syncfusionToolkit:SfTextInputLayout>
+                </VerticalStackLayout>
+                <Label
+                    Padding="{ui:EdgeInsets Horizontal={x:Static ui:Dimens.SpacingMd}}"
+                    HorizontalTextAlignment="Center"
+                    IsVisible="{x:Binding Form.HasErrors,
+                                          Mode=OneWay}"
+                    Style="{x:Static ui:Styles.Body2}"
+                    TextColor="{x:Static ui:AppColors.Red}">
+                    <Label.Opacity>
+                        <MultiBinding Converter="{Static ui:AppConverters.AnyFalseToOpacity}">
+                            <Binding Converter="{x:Static ui:AppConverters.IsListNullOrEmpty}" Path="Form.AccountErrors" />
+                            <Binding Converter="{x:Static ui:AppConverters.IsListNullOrEmpty}" Path="Form.PasswordErrors" />
+                        </MultiBinding>
+                    </Label.Opacity>
+                    <Label.Text>
+                        <MultiBinding Converter="{Static ui:AppConverters.FirstItem}">
+                            <Binding Converter="{x:Static ui:AppConverters.FirstItem}" Path="Form.AccountErrors" />
+                            <Binding Converter="{x:Static ui:AppConverters.FirstItem}" Path="Form.PasswordErrors" />
+                        </MultiBinding>
+                    </Label.Text>
+                </Label>
+                <ActivityIndicator
+                    IsRunning="{x:Binding IsLoading,
+                                          Mode=OneWay}"
+                    IsVisible="{x:Binding IsLoading,
+                                          Mode=OneWay}"
+                    Color="Black" />
+                <Button
+                    x:Name="SignInButton"
+                    BackgroundColor="Black"
+                    Clicked="SignInButton_Clicked"
+                    Command="{x:Binding SignInCommand}"
+                    IsEnabled="{x:Binding IsLoginButtonEnable,
+                                          Mode=OneWay}"
+                    Text="Login"
+                    TextColor="White" />
+                <Button
+                    BackgroundColor="Black"
+                    Command="{x:Binding SignUpCommand}"
+                    IsEnabled="{x:Binding IsCreateAccountButtonEnable,
+                                          Mode=OneWay}"
+                    Text="Create New Account"
+                    TextColor="White" />
+                <Label
+                    HorizontalOptions="Center"
+                    IsEnabled="{x:Binding IsForgotPasswordButtonEnable,
+                                          Mode=OneWay}"
+                    Text="Forgot password?"
+                    TextColor="#0078d4">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ForgotPasswordCommand}" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+
+</ContentPage>

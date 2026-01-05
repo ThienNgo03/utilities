@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Exercises.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:card="clr-namespace:Version1.Features.Exercises.ContentViews.Card"
+    xmlns:local="clr-namespace:Version1.Features.Exercises"
+    xmlns:progress="clr-namespace:Plugin.Maui.MauiProgressView;assembly=Plugin.Maui.MauiProgressView"
+    xmlns:signalR="clr-namespace:Version1.Features.WebSocket.SignalR"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    Title="Page"
+    x:DataType="local:ViewModel"
+    HideSoftInputOnTapped="True"
+    Loaded="ContentPage_Loaded"
+    Shell.NavBarIsVisible="True">
+
+    <ContentPage.Resources>
+        <FontImageSource
+            x:Key="SearchIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_search_48_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="InfoIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_info_28_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="CalendarAddIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_calendar_add_28_regular}"
+            Color="White" />
+
+        <DataTemplate x:Key="ItemTemplate" x:DataType="card:Model">
+            <Border
+                Grid.Row="1"
+                Padding="16"
+                BackgroundColor="White"
+                HeightRequest="195"
+                Stroke="White"
+                StrokeShape="RoundRectangle 8"
+                VerticalOptions="Start">
+                <Grid
+                    ColumnDefinitions="60, * , 50"
+                    ColumnSpacing="8"
+                    RowDefinitions="auto, *, auto"
+                    RowSpacing="8">
+                    <Border
+                        Grid.RowSpan="3"
+                        Padding="5"
+                        HorizontalOptions="Start"
+                        Stroke="White"
+                        StrokeShape="RoundRectangle 4"
+                        VerticalOptions="Start">
+                        <Image
+                            HeightRequest="45"
+                            Source="{x:Binding IconUrl}"
+                            WidthRequest="45" />
+                    </Border>
+                    <Grid
+                        Grid.Row="2"
+                        Padding="0"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        <progress:ProgressRingView
+                            HeightRequest="52"
+                            Maximum="100"
+                            Minimum="0"
+                            Progress="{x:Binding Progress}"
+                            RingColor="Black"
+                            ThumbColor="Cyan" />
+                        <Label
+                            FontSize="9"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span
+                                        FontAttributes="Bold"
+                                        Text="{x:Binding Progress}"
+                                        TextColor="Black" />
+                                    <Span Text="%" TextColor="Black" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Grid>
+                    <VerticalStackLayout Grid.Column="1" VerticalOptions="Start">
+                        <Label
+                            FontSize="Large"
+                            Text="{x:Binding Title,
+                                             Mode=OneTime}"
+                            TextColor="Black" />
+                        <Label Text="{x:Binding SubTitle, Mode=OneTime}" TextColor="Gray" />
+                    </VerticalStackLayout>
+                    <Border
+                        Grid.ColumnSpan="3"
+                        Padding="15,4,15,4"
+                        BackgroundColor="{x:Binding BadgeBackgroundColor}"
+                        HorizontalOptions="End"
+                        StrokeShape="RoundRectangle 4"
+                        VerticalOptions="Start">
+                        <Label Text="{x:Binding Badge, Mode=OneTime}" TextColor="{x:Binding BadgeTextColor}" />
+                    </Border>
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2"
+                        FontSize="12"
+                        LineBreakMode="TailTruncation"
+                        MaxLines="3"
+                        Text="{x:Binding Description,
+                                         Mode=OneTime}"
+                        TextColor="Black" />
+                    <syncfusionToolkit:SfButton
+                        x:Name="Detail"
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Background="Black"
+                        Clicked="Detail_Clicked"
+                        CommandParameter="{x:Binding Id}"
+                        CornerRadius="4"
+                        FontAttributes="Bold"
+                        Text="Detail" />
+                    <ImageButton
+                        x:Name="ConfigButton"
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Padding="11"
+                        Background="Black"
+                        Clicked="ConfigButton_Clicked"
+                        CommandParameter="{x:Binding Id}"
+                        CornerRadius="4"
+                        HeightRequest="30"
+                        Source="{x:StaticResource CalendarAddIcon}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="ItemsFooterTemplate">
+            <Grid HeightRequest="60" />
+        </DataTemplate>
+        <LinearItemsLayout
+            x:Key="ItemsLayout"
+            ItemSpacing="16"
+            Orientation="Vertical"
+            SnapPointsType="None" />
+    </ContentPage.Resources>
+
+    <Grid Background="{x:StaticResource GradientBackground}" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="54" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollView Margin="16,16,16,0" Orientation="Horizontal">
+            <syncfusionToolkit:SfChipGroup
+                x:Name="Filter"
+                ChipStroke="Cyan"
+                ChipTextColor="Cyan"
+                ChipType="Filter"
+                IsEnabled="True"
+                ItemsSource="{x:Binding Tags,
+                                        Mode=TwoWay}"
+                SelectedChipBackground="Cyan"
+                SelectedChipTextColor="Black"
+                SelectionChanged="Filter_SelectionChanged" />
+        </ScrollView>
+
+        <RefreshView
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Margin="16,0,16,0"
+            Command="{x:Binding LoadCommand,
+                                Mode=OneWay}"
+            HorizontalOptions="Fill"
+            IsRefreshing="{x:Binding IsLoading,
+                                     Mode=OneWay}"
+            RefreshColor="Black">
+            <CollectionView
+                FooterTemplate="{x:StaticResource ItemsFooterTemplate}"
+                ItemTemplate="{x:StaticResource ItemTemplate}"
+                ItemsLayout="{x:StaticResource ItemsLayout}"
+                ItemsSource="{x:Binding Items,
+                                        Mode=OneWay}"
+                ItemsUpdatingScrollMode="KeepScrollOffset" />
+        </RefreshView>
+
+        <Border
+            Grid.Row="2"
+            Padding="8"
+            BackgroundColor="#182026"
+            StrokeThickness="0">
+            <VerticalStackLayout Spacing="16">
+                <Button
+                    x:Name="ClearButton"
+                    BackgroundColor="Black"
+                    Clicked="ClearButton_Clicked"
+                    Command="{x:Binding ClearSearchCommand,
+                                        Mode=OneWay}"
+                    IsVisible="{x:Binding IsClearButtonVisible,
+                                          Mode=OneWay}"
+                    Text="Clear"
+                    TextColor="White" />
+                <syncfusionToolkit:SfTextInputLayout
+                    ContainerType="Outlined"
+                    Hint="Search"
+                    InputViewPadding="14,0,0,0"
+                    ReserveSpaceForAssistiveLabels="False"
+                    Stroke="Cyan">
+                    <syncfusionToolkit:SfTextInputLayout.HintLabelStyle>
+                        <syncfusionToolkit:LabelStyle TextColor="Cyan" />
+                    </syncfusionToolkit:SfTextInputLayout.HintLabelStyle>
+                    <syncfusionToolkit:SfTextInputLayout.ErrorLabelStyle>
+                        <syncfusionToolkit:LabelStyle TextColor="Cyan" />
+                    </syncfusionToolkit:SfTextInputLayout.ErrorLabelStyle>
+                    <Entry
+                        x:Name="SearchEntry"
+                        Text="{x:Binding SearchTerm,
+                                         Mode=TwoWay}"
+                        TextColor="Cyan" />
+                    <syncfusionToolkit:SfTextInputLayout.LeadingView>
+                        <Image Source="{x:StaticResource SearchIcon}" />
+                    </syncfusionToolkit:SfTextInputLayout.LeadingView>
+                </syncfusionToolkit:SfTextInputLayout>
+            </VerticalStackLayout>
+        </Border>
+        <signalR:Component
+            BaseUrl="wss://localhost:7011"
+            Command="{x:Binding HandleSocketReportsPayloadCommand}"
+            Events="{x:Binding Events,
+                               Mode=OneWay}"
+            EndPoint="workouts-hub" />
+    </Grid>
+</ContentPage>

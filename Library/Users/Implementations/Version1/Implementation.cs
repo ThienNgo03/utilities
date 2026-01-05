@@ -1,0 +1,96 @@
+﻿using Refit;
+using System.Diagnostics;
+
+namespace Library.Users.Implementations.Version1;
+
+public class Implementation : Interface
+{
+    #region [ Fields ]
+
+    private readonly IRefitInterface refitInterface;
+    #endregion
+
+    #region [ CTors ]
+
+    public Implementation(IRefitInterface refitInterface)
+    {
+        this.refitInterface = refitInterface;
+    }
+    #endregion
+
+    #region [ Methods ]
+
+    public async Task<Models.PaginationResults.Model<Model>> AllAsync(GET.Parameters parameters)
+    {
+        Stopwatch stopwatch = Stopwatch.StartNew();
+
+        
+        try
+        {
+            var response = await this.refitInterface.GET(parameters);
+
+            stopwatch.Stop();
+            var duration = stopwatch.ElapsedMilliseconds;
+
+            if(response is null || response.Content is null)
+            {
+                return new()
+                {
+
+                    Size = parameters.PageSize,
+                    Index = parameters.PageIndex,
+                    Items = new List<Model>(),
+                    Total = 0,
+                };
+            }
+
+            if (!response.IsSuccessStatusCode)
+            {
+                return new()
+                {
+                    Size = parameters.PageSize,
+                    Index = parameters.PageIndex,
+                    Items = new List<Model>(),
+                    Total = 0,
+                };
+            }
+
+            List<Model> items = new(); 
+            var data = response.Content.Items;
+            if(data is null || !data.Any())
+            {
+
+                return new()
+                {
+                    Size = parameters.PageSize,
+                    Index = parameters.PageIndex,
+                    Items = new List<Model>(),
+                    Total = 0,
+                };
+            }
+
+            return response.Content;
+        }
+        catch (ApiException ex)
+        {
+
+            throw new NotImplementedException();
+        }
+    }
+
+    public async Task CreateAsync(POST.Payload payload)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task UpdateAsync(PUT.Payload payload)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task DeleteAsync(DELETE.Parameters parameters)
+    {
+        throw new NotImplementedException();
+    }
+    #endregion
+}

@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Provider.SubscriptionByUserIds.Post;
+
+public class Payload
+{
+    public Guid UserId { get; set; }
+    public string SubscriptionPlan { get; set; } = string.Empty;
+    public string CompanyName { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public string Currency { get; set; } = string.Empty;
+    public string ChartColor { get; set; } = string.Empty;
+    public DateTime RenewalDate { get; set; }
+    public bool IsRecursive { get; set; }
+}

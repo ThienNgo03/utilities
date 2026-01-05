@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Version1.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:challenges="clr-namespace:Version1.Features.Challenges"
+    xmlns:exercises="clr-namespace:Version1.Features.Exercises"
+    xmlns:home="clr-namespace:Version1.Features.Home"
+    xmlns:local="clr-namespace:Version1"
+    xmlns:profile="clr-namespace:Version1.Features.Profile"
+    xmlns:signIn="clr-namespace:Version1.Features.Authentication.SignIn"
+    xmlns:subscriptions="clr-namespace:Version1.Features.Subscriptions"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    xmlns:users="clr-namespace:Version1.Features.Users"
+    Title="Version1"
+    Loaded="Shell_Loaded"
+    Shell.TabBarBackgroundColor="#182026"
+    Shell.TabBarForegroundColor="Cyan"
+    Shell.TabBarTitleColor="Cyan"
+    Shell.TabBarUnselectedColor="Gray">
+    <Shell.Resources>
+        <FontImageSource
+            x:Key="HomeIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_home_32_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="DumbbellIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_dumbbell_28_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="HeartPulseIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_heart_pulse_32_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="UsersIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_people_team_32_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="SoccerIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_sport_soccer_24_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="TrophyIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_trophy_48_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="ProfileIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_person_48_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="SubscriptionIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_data_pie_24_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="AlertIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_alert_48_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="SettingIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_settings_48_regular}"
+            Color="White" />
+    </Shell.Resources>
+
+    <Shell.TitleView>
+        <Grid Padding="16,0,16,0" BackgroundColor="#142126">
+            <Grid
+                ColumnDefinitions="40, 130"
+                ColumnSpacing="16"
+                RowDefinitions="*, *">
+                <toolkit:AvatarView
+                    Grid.RowSpan="2"
+                    HeightRequest="44"
+                    HorizontalOptions="Start"
+                    ImageSource="https://totechsintranet.blob.core.windows.net/avatars/bob.jpg"
+                    Stroke="Cyan"
+                    WidthRequest="44" />
+                <Label
+                    Grid.Column="1"
+                    Text="Viet To Hoang"
+                    TextColor="Cyan"
+                    VerticalOptions="End" />
+                <Label
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Text="Days: 442"
+                    TextColor="White" />
+            </Grid>
+            <HorizontalStackLayout HorizontalOptions="End" Spacing="16">
+                <toolkit:AvatarView
+                    Padding="8"
+                    HeightRequest="44"
+                    ImageSource="{x:StaticResource SettingIcon}"
+                    WidthRequest="44" />
+                <toolkit:AvatarView
+                    Padding="8"
+                    BorderColor="Cyan"
+                    HeightRequest="44"
+                    ImageSource="{x:StaticResource AlertIcon}"
+                    WidthRequest="44" />
+            </HorizontalStackLayout>
+        </Grid>
+    </Shell.TitleView>
+
+    <TabBar>
+        <ShellContent
+            Title="Authentication"
+            ContentTemplate="{DataTemplate signIn:Page}"
+            Route="sign-in" />
+    </TabBar>
+    <TabBar Route="main">
+        <Tab
+            Title="Home"
+            Icon="{x:StaticResource HomeIcon}"
+            Route="home">
+            <ShellContent ContentTemplate="{DataTemplate home:Page}" />
+        </Tab>
+        <Tab
+            Title="Exercises"
+            Icon="{x:StaticResource DumbbellIcon}"
+            Route="exercises">
+            <ShellContent ContentTemplate="{DataTemplate exercises:Page}" />
+        </Tab>
+        <Tab
+            Title="Subscriptions"
+            Icon="{x:StaticResource SubscriptionIcon}"
+            Route="subscriptions">
+            <ShellContent ContentTemplate="{DataTemplate subscriptions:Page}" />
+        </Tab>
+        <Tab
+            Title="Users"
+            Icon="{x:StaticResource UsersIcon}"
+            Route="users">
+            <ShellContent ContentTemplate="{DataTemplate users:Page}" />
+        </Tab>
+        <Tab
+            Title="Profile"
+            Icon="{x:StaticResource ProfileIcon}"
+            Route="profile">
+            <ShellContent ContentTemplate="{DataTemplate profile:Page}" />
+        </Tab>
+    </TabBar>
+
+</Shell>

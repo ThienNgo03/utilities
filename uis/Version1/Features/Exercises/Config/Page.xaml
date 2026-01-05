@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Version1.Features.Exercises.Config.Page"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Version1.Features.Exercises.Config"
+    xmlns:syncfusionToolkit="http://schemas.syncfusion.com/maui/toolkit"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ui="clr-namespace:UI"
+    Title="Page"
+    Padding="16"
+    x:DataType="local:ViewModel"
+    Background="{x:StaticResource GradientBackground}"
+    Loaded="ContentPage_Loaded"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <FontImageSource
+            x:Key="SearchIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_search_48_regular}"
+            Color="Cyan" />
+        <FontImageSource
+            x:Key="InfoIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_info_28_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="CalendarAddIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_calendar_add_28_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="DeleteIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_delete_12_regular}"
+            Color="White" />
+        <FontImageSource
+            x:Key="AddIcon"
+            FontFamily="{x:Static ui:FontNames.FluentSystemIconsRegular}"
+            Glyph="{x:Static ui:FluentUIIcon.Ic_fluent_add_12_regular}"
+            Color="White" />
+        <toolkit:CompareConverter x:Key="CompareConverter" />
+
+        <GridItemsLayout
+            x:Key="WeeklyItemsLayout"
+            HorizontalItemSpacing="8"
+            Orientation="Vertical"
+            Span="3"
+            VerticalItemSpacing="8" />
+        <DataTemplate x:Key="WeeklyItemTemplate" x:DataType="local:WeeklyItem">
+            <Border
+                x:Name="container"
+                Padding="8"
+                StrokeShape="RoundRectangle 8">
+                <Label
+                    x:Name="content"
+                    FontSize="12"
+                    HorizontalOptions="Center"
+                    Text="{x:Binding Content}"
+                    TextColor="Cyan"
+                    VerticalOptions="Center" />
+                <VisualStateManager.VisualStateGroups>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal">
+                            <VisualState.Setters>
+                                <Setter TargetName="container" Property="BackgroundColor" Value="Transparent" />
+                                <Setter TargetName="container" Property="Stroke" Value="Black" />
+                                <Setter TargetName="container" Property="StrokeThickness" Value="1" />
+                                <Setter TargetName="content" Property="Label.TextColor" Value="Black" />
+                            </VisualState.Setters>
+                        </VisualState>
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter TargetName="container" Property="BackgroundColor" Value="Black" />
+                                <Setter TargetName="content" Property="Label.TextColor" Value="White" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateManager.VisualStateGroups>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="WorkoutTimesHeader" x:DataType="x:String">
+            <Label
+                Margin="0,0,0,8"
+                FontAttributes="Bold"
+                Text="{x:Binding}"
+                TextColor="Black"
+                TextDecorations="Underline" />
+        </DataTemplate>
+        <DataTemplate x:Key="WorkoutTimeItem" x:DataType="local:WorkoutTimeItem">
+            <Border
+                BackgroundColor="Black"
+                HeightRequest="60"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0">
+                <Grid Padding="8">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="{x:Binding Content}"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                    <TimePicker
+                        HorizontalOptions="End"
+                        TextColor="White"
+                        Time="{x:Binding Time,
+                                         Mode=TwoWay}"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="WorkoutTimesFooter" x:DataType="x:String">
+            <syncfusionToolkit:SfButton
+                Background="Black"
+                CornerRadius="4"
+                Text="{x:Binding}"
+                TextColor="White" />
+        </DataTemplate>
+        <LinearItemsLayout
+            x:Key="WorkoutTimeItemsLayout"
+            ItemSpacing="8"
+            Orientation="Vertical" />
+
+
+        <DataTemplate x:Key="SetConfigItemsHeader" x:DataType="local:ViewModel">
+            <Grid
+                Margin="0,0,0,8"
+                RowDefinitions="auto, auto"
+                RowSpacing="8">
+                <Label
+                    FontAttributes="Bold"
+                    HorizontalOptions="Start"
+                    Text="{x:Binding SetConfigItemHeader,
+                                     Mode=OneTime}"
+                    TextColor="Black"
+                    TextDecorations="Underline"
+                    VerticalOptions="End" />
+                <ScrollView Grid.Row="1" Orientation="Horizontal">
+                    <syncfusionToolkit:SfChipGroup
+                        ChipStroke="Black"
+                        ChipTextColor="Black"
+                        ChipType="Choice"
+                        DisplayMemberPath="Content"
+                        ItemsSource="{x:Binding SelectedDays,
+                                                Mode=OneWay}"
+                        SelectedChipBackground="Black"
+                        SelectedChipTextColor="White"
+                        SelectedItem="{x:Binding SelectedDayForSet,
+                                                 Mode=TwoWay}" />
+                </ScrollView>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="SetConfigItemItem" x:DataType="local:SetConfigItem">
+            <Border
+                BackgroundColor="Black"
+                HeightRequest="90"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0">
+                <Grid Padding="8">
+                    <VerticalStackLayout Spacing="8" VerticalOptions="Center">
+                        <Label
+                            FontSize="Subtitle"
+                            Text="{x:Binding Content}"
+                            TextColor="White"
+                            VerticalOptions="Center" />
+                        <Label Text="Remove" TextColor="Red">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="Remove_Tapped" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout
+                        HorizontalOptions="End"
+                        Spacing="8"
+                        VerticalOptions="Center">
+                        <syncfusionToolkit:SfNumericUpDown
+                            x:Name="RepsEntry"
+                            BindingContext="{x:Binding Mode=OneWay}"
+                            CustomFormat="N0"
+                            Minimum="1"
+                            Placeholder="Reps"
+                            ShowBorder="False"
+                            ValueChanged="RepsEntry_ValueChanged"
+                            Value="{x:Binding Reps,
+                                              Mode=TwoWay}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="SetConfigItemsFooter" x:DataType="x:String">
+            <syncfusionToolkit:SfButton
+                x:Name="AddSetButton"
+                Background="Black"
+                Clicked="AddSetButton_Clicked"
+                CornerRadius="4"
+                ImageAlignment="Top"
+                ImageSource="{x:StaticResource AddIcon}"
+                ShowIcon="True"
+                Text="Add Sets"
+                TextColor="White"
+                VerticalOptions="Center" />
+        </DataTemplate>
+        <LinearItemsLayout
+            x:Key="SetConfigItemItemsLayout"
+            ItemSpacing="8"
+            Orientation="Vertical" />
+
+        <DataTemplate x:Key="SummaryDayItem" x:DataType="local:WeeklyItem">
+            <Border
+                Margin="0,0,0,8"
+                Padding="12"
+                BackgroundColor="White"
+                StrokeShape="RoundRectangle 4"
+                StrokeThickness="0">
+                <Grid ColumnDefinitions="*, auto, auto" ColumnSpacing="12">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="16"
+                        Text="{x:Binding Content}"
+                        TextColor="Cyan"
+                        VerticalOptions="Center" />
+                    <Label
+                        Grid.Column="1"
+                        FontSize="14"
+                        TextColor="White"
+                        VerticalOptions="Center">
+                        <Label.Text>
+                            <MultiBinding StringFormat="🕐 {0:hh\:mm}">
+                                <Binding Path="Time" Source="{x:Reference Name=WeeklyItems}" />
+                            </MultiBinding>
+                        </Label.Text>
+                    </Label>
+                    <Label
+                        Grid.Column="2"
+                        FontSize="14"
+                        Text="📋 0"
+                        TextColor="White"
+                        VerticalOptions="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <LinearItemsLayout
+            x:Key="SummaryLayout"
+            ItemSpacing="0"
+            Orientation="Vertical" />
+    </ContentPage.Resources>
+    <ScrollView>
+        <Grid>
+            <Grid RowDefinitions="auto, auto, auto, auto, auto" RowSpacing="16">
+                <!--  Weekly Schedule  -->
+                <Border
+                    Padding="16"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 4"
+                    StrokeThickness="0"
+                    VerticalOptions="Start">
+                    <VerticalStackLayout Spacing="8">
+                        <Label
+                            FontAttributes="Bold"
+                            Text="Weekly Schedule"
+                            TextColor="Black"
+                            TextDecorations="Underline" />
+                        <CollectionView
+                            ItemTemplate="{x:StaticResource WeeklyItemTemplate}"
+                            ItemsLayout="{x:StaticResource WeeklyItemsLayout}"
+                            ItemsSource="{x:Binding WeeklyItems,
+                                                    Mode=TwoWay}"
+                            SelectedItems="{x:Binding SelectedWeeklyItems,
+                                                      Mode=TwoWay}"
+                            SelectionMode="Multiple" />
+                    </VerticalStackLayout>
+                </Border>
+                <!--  Workout Times  -->
+                <Border
+                    Grid.Row="1"
+                    Padding="16"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 4"
+                    StrokeThickness="0">
+                    <CollectionView
+                        Grid.Row="1"
+                        Footer="Set days and times"
+                        FooterTemplate="{x:StaticResource WorkoutTimesFooter}"
+                        Header="Workout Times"
+                        HeaderTemplate="{x:StaticResource WorkoutTimesHeader}"
+                        ItemTemplate="{x:StaticResource WorkoutTimeItem}"
+                        ItemsLayout="{x:StaticResource WorkoutTimeItemsLayout}"
+                        ItemsSource="{x:Binding WorkoutTimeItems,
+                                                Mode=OneWay}" />
+                </Border>
+                <!--  Sets For Days  -->
+                <Border
+                    Grid.Row="2"
+                    Padding="16"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 4"
+                    StrokeThickness="0">
+                    <CollectionView
+                        FooterTemplate="{x:StaticResource SetConfigItemsFooter}"
+                        Header="{x:Binding Mode=TwoWay}"
+                        HeaderTemplate="{x:StaticResource SetConfigItemsHeader}"
+                        ItemTemplate="{x:StaticResource SetConfigItemItem}"
+                        ItemsLayout="{x:StaticResource SetConfigItemItemsLayout}"
+                        ItemsSource="{x:Binding SetConfigItems,
+                                                Mode=OneWay}" />
+                </Border>
+                <!--  Logs  -->
+                <Border
+                    Grid.Row="3"
+                    Padding="16"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 4"
+                    StrokeThickness="0">
+                    <VerticalStackLayout Spacing="12">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="18"
+                            Text="Workout Summary"
+                            TextColor="Black" />
+                        <Grid
+                            Margin="0,16,0,0"
+                            ColumnDefinitions="*, *"
+                            ColumnSpacing="8">
+                            <Border
+                                Grid.Column="0"
+                                Padding="12"
+                                BackgroundColor="Black"
+                                StrokeShape="RoundRectangle 4">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="Days"
+                                        TextColor="White" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="Center"
+                                        Text="{x:Binding SelectedDays.Count}"
+                                        TextColor="Cyan" />
+                                </VerticalStackLayout>
+                            </Border>
+                            <Border
+                                Grid.Column="1"
+                                Padding="12"
+                                BackgroundColor="Black"
+                                StrokeShape="RoundRectangle 4">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label
+                                        FontSize="12"
+                                        HorizontalOptions="Center"
+                                        Text="Total Reps"
+                                        TextColor="White" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="18"
+                                        HorizontalOptions="Center"
+                                        Text="{x:Binding SummaryTotalReps,
+                                                         Mode=OneWay}"
+                                        TextColor="Cyan" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                        <!--  Raw Data Inspection  -->
+                        <Border
+                            Margin="0,8,0,0"
+                            Padding="12"
+                            BackgroundColor="#0d1117"
+                            StrokeShape="RoundRectangle 4">
+                            <VerticalStackLayout Spacing="8">
+                                <Label
+                                    FontAttributes="Bold"
+                                    FontSize="14"
+                                    Text="Weekly Schedule:"
+                                    TextColor="Orange" />
+
+                                <!--  Display each selected day with its workout time  -->
+                                <CollectionView BackgroundColor="Transparent" ItemsSource="{x:Binding WorkoutTimeItems, Mode=OneWay}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="local:WorkoutTimeItem">
+                                            <Grid
+                                                Margin="0,2"
+                                                ColumnDefinitions="*, auto"
+                                                ColumnSpacing="8">
+                                                <Label
+                                                    FontSize="12"
+                                                    Text="{x:Binding Content}"
+                                                    TextColor="Cyan"
+                                                    VerticalOptions="Center" />
+                                                <Label
+                                                    Grid.Column="1"
+                                                    FontSize="12"
+                                                    Text="{x:Binding Time,
+                                                                     StringFormat='{0:hh\\:mm}'}"
+                                                    TextColor="White"
+                                                    VerticalOptions="Center" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+                <!--  Action Buttons  -->
+                <Border
+                    Grid.Row="4"
+                    Padding="16"
+                    BackgroundColor="White"
+                    StrokeShape="RoundRectangle 8">
+                    <VerticalStackLayout Spacing="24">
+                        <Button
+                            BackgroundColor="Black"
+                            Command="{x:Binding SaveCommand}"
+                            Text="Save"
+                            TextColor="White" />
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+            <Border BackgroundColor="#80000000" IsVisible="{x:Binding IsFuckingBusy, Mode=OneWay}">
+                <Border
+                    Padding="24"
+                    BackgroundColor="#1a1a1a"
+                    HorizontalOptions="Center"
+                    StrokeShape="RoundRectangle 12"
+                    StrokeThickness="0"
+                    VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="16">
+                        <Border
+                            BackgroundColor="Transparent"
+                            HeightRequest="60"
+                            HorizontalOptions="Center"
+                            Stroke="Cyan"
+                            StrokeShape="RoundRectangle 30"
+                            StrokeThickness="3"
+                            WidthRequest="60">
+                            <ActivityIndicator
+                                HeightRequest="40"
+                                HorizontalOptions="Center"
+                                IsRunning="{x:Binding IsFuckingBusy,
+                                                      Mode=OneWay}"
+                                VerticalOptions="Center"
+                                WidthRequest="40"
+                                Color="Cyan" />
+                        </Border>
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="16"
+                            HorizontalOptions="Center"
+                            Text="Loading..."
+                            TextColor="White" />
+                        <Label
+                            FontSize="12"
+                            HorizontalOptions="Center"
+                            HorizontalTextAlignment="Center"
+                            Text="Please wait while we process your request"
+                            TextColor="#cccccc" />
+                    </VerticalStackLayout>
+                </Border>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>
