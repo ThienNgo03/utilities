@@ -1,0 +1,58 @@
+{
+  "info": {
+    "_postman_id": "23f93146-e9da-463b-93bd-8c71b00cc3ea",
+    "name": "Initializer",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "49014517"
+  },
+  "item": [
+    {
+      "name": "AddAdmin",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{journal-docker}}/api/initializer/add-init-admin",
+          "host": [
+            "{{journal-docker}}"
+          ],
+          "path": [
+            "api",
+            "initializer",
+            "add-init-admin"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "AddMasterData",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access-token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "url": {
+          "raw": "{{journal-docker}}/api/initializer/add-init-master-data",
+          "host": [
+            "{{journal-docker}}"
+          ],
+          "path": [
+            "api",
+            "initializer",
+            "add-init-master-data"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}

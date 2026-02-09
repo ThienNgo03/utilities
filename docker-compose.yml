@@ -1,0 +1,92 @@
+services:
+
+  journal:
+    image: thienngo03/journal:2.2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 6000:80
+    depends_on:
+      - journalsqlserver
+      - mongodb
+      - opensearch
+
+  iowa:
+    image: thienngo03/iowa:2.2
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - 6001:80
+    depends_on:
+      - iowasqlserver
+      - cassandra
+
+  mongodb:
+    image: mongo:6.0
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=mongopw
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodata:/var/lib/mongodb/data
+
+  cassandra:
+    image: cassandra:latest
+    environment:
+      - CASSANDRA_SEEDS=cassandra
+      - CASSANDRA_CLUSTER_NAME=TestCluster
+      - CASSANDRA_NUM_TOKENS=256
+      - CASSANDRA_DC=datacenter1
+      - CASSANDRA_RACK=rack1
+      - CASSANDRA_AUTHENTICATOR=PasswordAuthenticator
+    ports:
+      - 9042:9042
+    volumes:
+      - cassandradb:/var/lib/cassandra
+
+  journalsqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SqlServer2022!
+      - MSSQL_PID=Developer
+    ports:
+      - 1433:1433
+    volumes:
+      - journalsqlserverdata:/var/opt/mssql
+    hostname: journalsqlserver
+
+  iowasqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=SqlServer2022!
+      - MSSQL_PID=Developer
+    ports:
+      - 1434:1433
+    volumes:
+      - iowasqlserverdata:/var/opt/mssql
+    hostname: iowasqlserver
+
+  opensearch:
+    image: opensearchproject/opensearch:latest
+    environment:
+      - discovery.type=single-node
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=MySecure@Pass123!
+      - DISABLE_SECURITY_PLUGIN=false
+    ports:
+      - 9200:9200
+      - 9600:9600
+    volumes:
+      - opensearchdata:/usr/share/opensearch/data
+
+volumes:
+  mongodata:
+  cassandradb:
+  journalsqlserverdata:
+  iowasqlserverdata:
+  opensearchdata:
