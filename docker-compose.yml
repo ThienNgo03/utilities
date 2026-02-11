@@ -1,12 +1,12 @@
 services:
 
   journal:
-    image: thienngo03/journal:2.2
+    image: thienngo03/journal:2.3
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - 6000:80
+      - 5000:80
     depends_on:
       - journalsqlserver
       - mongodb
@@ -18,10 +18,17 @@ services:
       - ASPNETCORE_ENVIRONMENT=Docker
       - ASPNETCORE_URLS=http://+:80
     ports:
-      - 6001:80
+      - 5001:80
     depends_on:
       - iowasqlserver
       - cassandra
+  
+  portal:
+    image: thienngo03/portal:1.0
+    ports:
+      - "5173:80"
+    depends_on:
+      - journal
 
   mongodb:
     image: mongo:6.0
@@ -85,8 +92,8 @@ services:
       - opensearchdata:/usr/share/opensearch/data
 
 volumes:
-  mongodata:
-  cassandradb:
   journalsqlserverdata:
   iowasqlserverdata:
+  mongodata:
+  cassandradb:
   opensearchdata:
