@@ -40,11 +40,8 @@
 	<PackageReference Include="Microsoft.AspNetCore.JsonPatch" Version="9.0.9" />
 	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
 	<PackageReference Include="Azure.Storage.Blobs" Version="12.26.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\iowa\provider\Provider.csproj" />
-    <ProjectReference Include="..\..\packages\Clients\dotNET\REST\Version1\Library\Library.csproj" />
+	<PackageReference Include="ThienNgo03.Iowa.Provider" Version="1.0.0" />
+	<PackageReference Include="ThienNgo03.Journal.Library" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

@@ -66,11 +66,8 @@
 		<PackageReference Include="Plugin.Maui.MauiProgressView" Version="0.0.4" />
 		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.8" />
 		<PackageReference Include="zoft.MauiExtensions.Controls.AutoCompleteEntry" Version="4.0.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\..\..\..\packages\Clients\dotNET\REST\Version1\Library\Library.csproj" />
-	  <ProjectReference Include="..\Core\Core.csproj" />
+		<PackageReference Include="ThienNgo03.Journal.Library" Version="1.0.0" />
+		<PackageReference Include="ThienNgo03.Bff.Core" Version="1.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
