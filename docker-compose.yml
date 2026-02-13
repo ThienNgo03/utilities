@@ -1,9 +1,9 @@
 services:
 
   journal:
-    image: thienngo03/journal:2.3
+    image: thienngo03/journal:2.4
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_ENVIRONMENT=UtilitiesDocker
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 5000:80
@@ -24,7 +24,7 @@ services:
       - cassandra
   
   portal:
-    image: thienngo03/portal:1.0
+    image: thienngo03/utilities-portal:1.0
     ports:
       - "5173:80"
     depends_on:
