@@ -1,14 +1,14 @@
 services:
 
   journal:
-    image: thienngo03/journal:2.4
+    image: thienngo03/journal:2.6
     environment:
       - ASPNETCORE_ENVIRONMENT=UtilitiesDocker
       - ASPNETCORE_URLS=http://+:80
     ports:
       - 5000:80
     depends_on:
-      - journalsqlserver
+      - journalpostgres
       - mongodb
       - opensearch
 
@@ -54,17 +54,14 @@ services:
     volumes:
       - cassandradb:/var/lib/cassandra
 
-  journalsqlserver:
-    image: mcr.microsoft.com/mssql/server:2022-latest
+  journalpostgres:
+    image: postgres:18
     environment:
-      - ACCEPT_EULA=Y
-      - SA_PASSWORD=SqlServer2022!
-      - MSSQL_PID=Developer
+      - POSTGRES_PASSWORD=postgrespw
     ports:
-      - 1433:1433
+      - 5432:5432
     volumes:
-      - journalsqlserverdata:/var/opt/mssql
-    hostname: journalsqlserver
+      - journalpgdata:/var/lib/postgresql
 
   iowasqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -92,7 +89,7 @@ services:
       - opensearchdata:/usr/share/opensearch/data
 
 volumes:
-  journalsqlserverdata:
+  journalpgdata:
   iowasqlserverdata:
   mongodata:
   cassandradb:
