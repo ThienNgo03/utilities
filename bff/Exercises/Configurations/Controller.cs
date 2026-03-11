@@ -15,7 +15,6 @@ namespace BFF.Exercises.Configurations
     [ApiController]
     public class Controller : ControllerBase
     {
-        private readonly JournalDbContext _context;
         private readonly IMapper _mapper;
         private readonly IMessageBus _messageBus;
         private readonly IHubContext<Hub> _hubContext;
@@ -26,7 +25,6 @@ namespace BFF.Exercises.Configurations
             IHubContext<Hub> hubContext,
             Library.Workouts.Interface workoutInterface)
         {
-            _context = context;
             _mapper = mapper;
             _messageBus = messageBus;
             _hubContext = hubContext;

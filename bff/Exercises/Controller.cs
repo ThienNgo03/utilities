@@ -8,13 +8,11 @@ namespace BFF.Exercises;
 [ApiController]
 public class Controller : ControllerBase
 {
-    private readonly JournalDbContext _context;
     private readonly IMapper _mapper;
     private readonly Library.Exercises.Interface _exercises;
     private readonly Library.Muscles.Interface _muscles;
     public Controller(JournalDbContext context, IMapper mapper, Library.Exercises.Interface exercises, Library.Muscles.Interface muscles)
     {
-        _context = context;
         _mapper = mapper;
         _exercises = exercises;
         _muscles = muscles;

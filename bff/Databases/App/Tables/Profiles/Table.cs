@@ -1,5 +1,8 @@
-﻿namespace BFF.Databases.App.Tables.User;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
+namespace BFF.Databases.App.Tables.Profiles;
+
+[Table("profiles", Schema = "journal")]
 public class Table
 {
     public Guid Id { get; set; }

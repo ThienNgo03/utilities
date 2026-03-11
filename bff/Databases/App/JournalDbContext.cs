@@ -4,7 +4,7 @@ namespace BFF.Databases.App;
 
 public class JournalDbContext(DbContextOptions<JournalDbContext> options) : DbContext(options)
 {
-    public DbSet<Tables.User.Table> Users { get; set; }
+    public DbSet<Tables.Profiles.Table> Profiles { get; set; }
     public DbSet<Tables.Exercise.Table> Exercises { get; set; }
     public DbSet<Tables.Workout.Table> Workouts { get; set; }
     public DbSet<Tables.WeekPlan.Table> WeekPlans { get; set; }

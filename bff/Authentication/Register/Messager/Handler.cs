@@ -11,7 +11,7 @@ public class Handler
     }
     public async Task Handle(Message message)
     {
-        var newAccount = new Databases.App.Tables.User.Table
+        var newAccount = new Databases.App.Tables.Profiles.Table
         {
             Id = message.id,
             Name = message.name,
@@ -19,7 +19,7 @@ public class Handler
             PhoneNumber = message.phoneNumber,
             ProfilePicture = message.profilePicture,
         };
-        _context.Users.Add(newAccount);
+        _context.Profiles.Add(newAccount);
         await _context.SaveChangesAsync();
     }
 }

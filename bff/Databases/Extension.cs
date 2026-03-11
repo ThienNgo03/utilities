@@ -42,34 +42,30 @@ public static class Extension
         }
         var journalConnectionString = new ConnectionStringBuilder()
             .WithHost(journalDbConfig.Host)
-            .WithPort(journalDbConfig.Port)
+            .WithPort(journalDbConfig.Port!.Value)
             .WithDatabase(journalDbConfig.Database)
             .WithUsername(journalDbConfig.Username)
             .WithPassword(journalDbConfig.Password)
-            .WithTrustedConnection()
-            .WithTrustServerCertificate()
             .Build();
 
         var identityConnectionString = new ConnectionStringBuilder()
             .WithHost(identityDbConfig.Host)
-            .WithPort(identityDbConfig.Port)
+            .WithPort(identityDbConfig.Port!.Value)
             .WithDatabase(identityDbConfig.Database)
             .WithUsername(identityDbConfig.Username)
             .WithPassword(identityDbConfig.Password)
-            .WithTrustedConnection()
-            .WithTrustServerCertificate()
             .Build();
 
         services.AddDbContext<JournalDbContext>(x =>
         {
             x.EnableSensitiveDataLogging();
-            x.UseSqlServer(journalConnectionString);
+            x.UseNpgsql(journalConnectionString);
         });
 
         services.AddDbContext<IdentityContext>(x =>
         {
             x.EnableSensitiveDataLogging();
-            x.UseSqlServer(identityConnectionString);
+            x.UseNpgsql(identityConnectionString);
         });
 
         services.AddIdentity<IdentityUser, IdentityRole>()

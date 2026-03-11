@@ -19,24 +19,27 @@ public class Controller : ControllerBase
     private readonly JournalDbContext _context;
     private readonly IHubContext<Hub> _hubContext;
     private readonly IMapper _mapper;
+    private readonly Library.Users.Interface _users;
     public Controller(ILogger<Controller> logger, 
         JournalDbContext context, 
         IMessageBus messageBus, 
         IHubContext<Hub> hubContext,
-        IMapper mapper)
+        IMapper mapper,
+        Library.Users.Interface users)
     {
         _logger = logger;
         _context = context;
         _messageBus = messageBus;
         _hubContext = hubContext;
         _mapper = mapper;
+        _users = users;
     }
 
     [HttpGet("all")]
     [AllowAnonymous]
     public async Task<IActionResult> All([FromQuery] All.Parameters parameters, CancellationToken cancellationToken = default!)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.Profiles.AsQueryable();
 
         if (parameters.UserId is not null)
             query = query.Where(u => u.Id == parameters.UserId.Value);
@@ -51,9 +54,23 @@ public class Controller : ControllerBase
             Title = u.Name,
             SubTitle = u.Email
         }).ToList();
+
         _mapper.All.SetImageUrl(response);
         _mapper.All.SetStatus(response);
         _mapper.All.SetTime(response);
         return Ok(response);
+
+        //var users = await _users.AllAsync(parameters);
+
+        //var items = users.Items.Select(u => new All.Response
+        //{
+        //    UserId = u.Id,
+        //    Title = u.Name,
+        //    SubTitle = u.Email
+        //}).ToList();
+        //_mapper.All.SetImageUrl(items);
+        //_mapper.All.SetStatus(items);
+        //_mapper.All.SetTime(items);
+        //return Ok(items);
     }
 }
