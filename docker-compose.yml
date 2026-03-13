@@ -22,13 +22,6 @@ services:
     depends_on:
       - iowasqlserver
       - cassandra
-  
-  portal:
-    image: thienngo03/journal-portal:1.1
-    ports:
-      - "5173:80"
-    depends_on:
-      - journal
 
   mongodb:
     image: mongo:6.0
